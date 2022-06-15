@@ -151,6 +151,7 @@ class SimpleDataSource(DataSource):
     Returns:
       An input batch.
     """
+    # DataSource 通过调用 InputGenerator (self._input_generator._DataSourceFromFilePattern) 获取下一个 Batch
     p = self.params
     file_patterns = ','.join(p.file_pattern)
     if p.file_type:

@@ -26,4 +26,4 @@ echo "
 http://www.quest.dcs.shef.ac.uk/wmt16_files_mmt/training.tar.gz
 http://www.quest.dcs.shef.ac.uk/wmt16_files_mmt/validation.tar.gz
 http://www.quest.dcs.shef.ac.uk/wmt16_files_mmt/mmt16_task1_test.tar.gz" \
-  | aria2c -x16 -s16 --dir="${ROOT}/raw" -i -
+  | aria2c --all-proxy = 'http://127.0.0.1:1087'-x16 -s16 --dir="${ROOT}/raw" -i -

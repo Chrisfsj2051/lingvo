@@ -72,6 +72,8 @@ class NmtInput(base_input_generator.BaseSequenceInputGenerator):
               tf.reduce_sum(1.0 - features['target_padding'])), tf.int32)
       return [features[k] for k, _ in outputs], bucket_key
 
+    # generic_input.GenericInput 创建一个数据处理 pipeline
+    # 实际调用 C++ 实现 generic_input_op_kernels.cc
     features, bucket_keys = generic_input.GenericInput(
         file_pattern=file_pattern,
         processor=Proc,

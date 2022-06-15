@@ -987,6 +987,7 @@ class BaseLayer(tf.Module, metaclass=BaseLayerMeta):
     if not p.name:
       p.name = name
     with self._CreateChildContext(name):
+      # data_source, input_generator 也是在这里构造的
       child = p.Instantiate()
     self._private_children[name] = child
 

@@ -26,4 +26,4 @@ echo "
 http://www.statmt.org/wmt13/training-parallel-europarl-v7.tgz
 http://www.statmt.org/wmt13/training-parallel-commoncrawl.tgz
 http://www.statmt.org/wmt14/training-parallel-nc-v9.tgz" \
-  | aria2c -x16 -s1 -j1 --dir="${ROOT}/raw" -i -
+  | aria2c --all-proxy = 'http://127.0.0.1:1087' -x16 -s1 -j1 --dir="${ROOT}/raw" -i -

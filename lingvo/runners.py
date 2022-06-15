@@ -289,6 +289,9 @@ class Trainer(base_runner.BaseRunner):
           # sess.run() call.
           # For multi-task models, `self._model.task_schedule.cur_probs` will
           # be updated.
+
+          # self._model = lingvo.core.base_model.SingleTaskModel
+          # self._model._task = lingvo.tasks.mt.model.TransformerModel
           task = self._model.SampleTask(global_step)
           if self._task_probs_summary_writers:
             for index, prob in enumerate(self._model.task_schedule.cur_probs):

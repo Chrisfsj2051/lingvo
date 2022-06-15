@@ -54,6 +54,7 @@ class WmtEnDeTransformerBase(base_model_params.SingleTaskModelParams):
     return p
 
   def Train(self):
+    # 构造数据集时调用 Train，赋值给 cfg.input
     p = self._CommonInputParams(is_eval=False)
 
     p.file_pattern = 'tfrecord:' + os.path.join(self.DATADIR,

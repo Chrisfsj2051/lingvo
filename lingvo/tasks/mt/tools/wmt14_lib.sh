@@ -38,7 +38,8 @@ function tokenize {
     "${output_base}.${lang}"
 }
 
-WPM_VOC=../wpm-${SRC}${TGT}.voc
+#WPM_VOC=../wpm-${SRC}${TGT}.voc
+WPM_VOC=/home/nirvana/workspace/PycharmProjects/lingvo/lingvo/tasks/mt/wpm-ende.voc
 
 function wpm_encode {
   local source_files="$1"
@@ -52,7 +53,7 @@ function wpm_encode {
     local shard_id=$((n - 1))
     local output_filepath=$(printf ${output_template} ${shard_id} ${num_shards})
     set -x
-    nice -n 20 python3 -m lingvo.tools.wpm_encode_file --wpm_filepath=${WPM_VOC} --source_filepaths="${source_files}" \
+    nice -n 20 bazel run -c opt //lingvo/tools:wpm_encode_file -- --wpm_filepath=${WPM_VOC} --source_filepaths="${source_files}" \
       --target_filepaths="${target_files}" --num_shards="${num_shards}" --shard_id="${shard_id}" \
       --max_len="$max_len" \
       --output_filepath="${output_filepath}" --logtostderr || touch convert.FAILED &

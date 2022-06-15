@@ -28,6 +28,9 @@ To use GPU, add `--config=cuda` to build command and set `--run_locally=gpu`.
 import os
 import re
 import sys
+# parent dir
+sys.path.insert(0, os.path.dirname(os.getcwd()))
+print(sys.path)
 import threading
 
 from lingvo import base_trial
@@ -438,6 +441,7 @@ class RunnerManager:
     tf.logging.info('Job %s start', job)
     common_args = (model_task_name, logdir, tf_master, trial)
     if job == 'controller':
+      # 构造数据集
       cfg = self.GetParamsForDataset('controller', 'Train')
       cfg.cluster.xla_device = 'cpu'
       return self.Controller(cfg, *common_args)
@@ -514,6 +518,7 @@ class RunnerManager:
       all_runners[0].Start()
     else:
       threads = []
+      # all_runners = [lingvo.runners.Controller, lingvo.runners.Trainer]
       for runner in all_runners:
         runner_class_name = str(runner)
         t = threading.Thread(target=runner.Start, name=runner_class_name)
@@ -799,7 +804,6 @@ class RunnerManager:
     """Start the process."""
     tf.logging.set_verbosity(tf.logging.INFO)
     tf.logging.info('tf_api_version: %s', tf.summarize_tf2_status())
-
     if FLAGS.mode == 'inspect_params':
       self.InspectParams()
       return
@@ -845,6 +849,8 @@ def main(unused_argv):
 
 
 if __name__ == '__main__':
+  # import os
+  # os.system('bazel run -c opt //lingvo:trainer --config=cuda -- --model=mt.wmt14_en_de.WmtEnDeTransformerSmall --run_locally=gpu --mode=sync --saver_max_to_keep=3 --job=controller,trainer_client')
   tf.flags.mark_flag_as_required('model')
   FLAGS(sys.argv, known_only=True)
   if FLAGS.disable_tf2:

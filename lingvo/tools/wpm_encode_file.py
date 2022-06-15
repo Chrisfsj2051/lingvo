@@ -19,7 +19,7 @@ from lingvo.core import wpm_encoder
 import numpy as np
 import six
 from six import text_type
-
+tf.disable_eager_execution()
 tf.flags.DEFINE_string(
     'source_filepaths', '',
     'Comma-separated list of source files. Must align with target')
