@@ -13,7 +13,12 @@
 # limitations under the License.
 # ==============================================================================
 """Tests for input generator."""
-
+# import sys
+# import os
+# sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd()))))
+# print(sys.path)
+# os.environ['TEST_SRCDIR'] = '/home/nirvana/workspace/PycharmProjects/lingvo/bazel-out/k8-opt/bin/lingvo/tasks/mt/input_generator_test.runfiles/'
+# Pycharm 新建 Python 任务 （不要右键运行，否则会变成 pytest）
 from absl.testing import parameterized
 import lingvo.compat as tf
 from lingvo.core import cluster_factory
@@ -63,12 +68,27 @@ class InputTest(test_utils.TestCase, parameterized.TestCase):
     return p
 
   def testBasic(self):
+    # setting: p.bucket_upper_bound = [20, 40] p.bucket_batch_limit = [4, 8]
+    # 前10个batch的返回结果：
+    # [
+    #   [15, 19, 20, 15], [37, 23, 21, 29, 30, 24, 25, 23], [15, 18, 18, 18], [19, 7, 15, 16],
+    #   [21, 32, 31, 34, 39, 38, 26, 22], [28, 24, 25, 29, 30, 40, 22, 29], [16, 8, 10, 17],
+    #   [18, 10, 20, 15], [25, 23, 24, 36, 33, 32, 24, 32], [17, 9, 13, 15]
+    # ]
     p = self._CreateNmtInputParams()
     with self.session(use_gpu=False):
       inp = input_generator.NmtInput(p)
       # Runs a few steps.
       for _ in range(10):
         self.evaluate(inp.GetPreprocessedInputBatch())
+
+    # 写法1：每次都重新构建计算图，因此获取的都是第一个 Batch
+    # for _ in range(10):
+    #     self.evaluate(inp.GetPreprocessedInputBatch())
+    # 写法2：只构建一次计算图，每次都 call 原图，因此可以遍历数据集
+    # batch_tensor = inp.GetPreprocessedInputBatch()
+    # for _ in range(10):
+    #     self.evaluate(batch_tensor)
 
   def testMlPerfPackedInput(self):
     p = self._CreateMlPerfPackedInputParams()
