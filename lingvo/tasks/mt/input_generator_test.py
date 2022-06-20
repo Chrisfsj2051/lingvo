@@ -75,6 +75,14 @@ class InputTest(test_utils.TestCase, parameterized.TestCase):
     #   [21, 32, 31, 34, 39, 38, 26, 22], [28, 24, 25, 29, 30, 40, 22, 29], [16, 8, 10, 17],
     #   [18, 10, 20, 15], [25, 23, 24, 36, 33, 32, 24, 32], [17, 9, 13, 15]
     # ]
+    # setting: p.bucket_batch_limit = [4, 10008]
+    # 前10个batch的返回结果：
+    # [
+    #   [15, 15, 15, 18], [18, 18, 7, 15], [16, 16, 8, 10], [17, 18, 10, 15], [17, 9, 13, 15],
+    #   [18, 10, 5, 12], [10, 15, 13, 10], [3, 3, 15, 15], [3, 12, 15, 15], [15, 15, 18, 18]
+    # ]
+    # 不足 10008 个则 bucket 全部被扔掉，不会 repeat
+
     p = self._CreateNmtInputParams()
     with self.session(use_gpu=False):
       inp = input_generator.NmtInput(p)

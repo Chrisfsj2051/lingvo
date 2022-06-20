@@ -29,8 +29,8 @@ import os
 import re
 import sys
 # parent dir
-sys.path.insert(0, os.path.dirname(os.getcwd()))
-print(sys.path)
+# sys.path.insert(0, os.path.dirname(os.getcwd()))
+# print(sys.path)
 import threading
 
 from lingvo import base_trial
